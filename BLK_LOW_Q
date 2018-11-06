@@ -1,4 +1,4 @@
-/*
+/*LOW
 	In this procedure "Additional routing policy parameter" is bloking threshold by ACD or/and ASR.
 	"Additional policy parameter" let limiting low bound of ASR and ACD.
 	It accepts "xx" or "xxx" or "xxyy" or "xxxyy" input.
@@ -25,7 +25,7 @@ p.d_cps := p.d_cps + 0.01;
       IF p.d_acd<30 OR p.d_asr_c<0.03 OR (1/p.d_acd/0.65+0.01)>p.d_asr_c OR (1-1*14.2/p.d_acd-0.015)<p.d_asr_c THEN
         p.appeal_value_3 := p.appeal_value_3 + (p.d_total_calls/p.d_total_time)*100;
         p.appeal_value_2 := p.appeal_value_2 + (p.d_total_calls/p.d_total_time)*100 * p.d_cost_cu*10;
-        p.appeal_value_1 := p.appeal_value_1;
+        p.appeal_value_1 := p.d_cost_cu*100;
       ELSE
 				IF TRUNC(ABS(p.d_policy_param))>999 AND p.d_acd>=TRUNC(TRUNC(ABS(p.d_policy_param))/100) AND p.d_asr_c>=(TRUNC(ABS(p.d_policy_param))/100)-TRUNC(TRUNC(ABS(p.d_policy_param))/100) THEN	/* Checking ACD blocking threshold */
 					p.appeal_value_3 := (1000/p.d_acd)*(1+(p.d_policy_param-TRUNC(p.d_policy_param)));					            /* Set appeal for priority reasons */
@@ -38,7 +38,7 @@ p.d_cps := p.d_cps + 0.01;
 				ELSE
 					p.appeal_value_3 := p.appeal_value_3 + (p.d_total_calls/p.d_total_time)*100;
 					p.appeal_value_2 := p.appeal_value_2 + (p.d_total_calls/p.d_total_time)*100 * p.d_cost_cu*10;
-					p.appeal_value_1 := p.appeal_value_1;
+					p.appeal_value_1 := p.d_cost_cu*100;
 				END IF;
       END IF;
 		END IF;
@@ -47,7 +47,7 @@ p.d_cps := p.d_cps + 0.01;
 		IF p.d_total_time<1 OR p.d_success_calls_asr<2 THEN   	/* Excluding calculation on empty stats values */
       p.appeal_value_3 := p.appeal_value_3 + p.d_total_calls*2;
       p.appeal_value_2 := p.appeal_value_3;
-      p.appeal_value_1 := p.appeal_value_1;
+      p.appeal_value_1 := p.d_cost_cu*100;
     ELSE
       p.d_asr_c := (p.d_asr_c+(p.d_success_calls_asr/p.d_total_calls))/2;
       p.d_acd := (p.d_acd+(p.d_total_time/p.d_success_calls_asr))/2;   		/* p.d_acd - усредненное ацд из ацд системы и среднего ацд поделено на 2*/
@@ -59,7 +59,7 @@ p.d_cps := p.d_cps + 0.01;
           p.appeal_value_1 := 5000 + p.d_acd;
         ELSE
           p.appeal_value_2 := p.appeal_value_2 + (10/(((0.45+p.d_asr_c)/2)*p.d_acd))*(100+30/1+p.d_cps) * p.d_cost_cu*10;
-          p.appeal_value_1 := p.appeal_value_1;
+          p.appeal_value_1 := p.d_cost_cu*100;
         END IF;
       ELSE
 				IF TRUNC(ABS(p.d_policy_param))>999 AND p.d_acd>=TRUNC(TRUNC(ABS(p.d_policy_param))/100) AND p.d_asr_c>=(TRUNC(ABS(p.d_policy_param))/100)-TRUNC(TRUNC(ABS(p.d_policy_param))/100) THEN	/* Checking ACD blocking threshold */
@@ -68,7 +68,7 @@ p.d_cps := p.d_cps + 0.01;
 					p.appeal_value_1 := p.d_cost_cu*100*(1+(p.d_policy_param-TRUNC(p.d_policy_param)));
 				ELSIF ABS(p.d_policy_param)<1000 AND p.d_acd>=TRUNC(ABS(p.d_policy_param)) THEN
 					p.appeal_value_3 := (1000/p.d_acd)*(1+(p.d_policy_param-TRUNC(p.d_policy_param)));					            /* Set appeal for priority reasons */
-					p.appeal_value_2 := p.appeal_value_3 * p.d_cost_cu*10;
+					p.appeal_value_2 := p.appeal_value_3 * p.d_cost_cu * 10;
 					p.appeal_value_1 := p.d_cost_cu*100*(1+(p.d_policy_param-TRUNC(p.d_policy_param)));
 				ELSE
 					p.appeal_value_3 := p.appeal_value_3 + (10/(((0.45+p.d_asr_c)/2)*p.d_acd))*(100+30/p.d_cps);
@@ -78,7 +78,7 @@ p.d_cps := p.d_cps + 0.01;
 						p.appeal_value_1 := 5000 + p.d_acd;
 					ELSE
 						p.appeal_value_2 := p.appeal_value_2 + (10/(((0.45+p.d_asr_c)/2)*p.d_acd))*(100+30/1+p.d_cps) * p.d_cost_cu*10;
-						p.appeal_value_1 := p.appeal_value_1;
+						p.appeal_value_1 := p.d_cost_cu*100;
 					END IF;
 				END IF;
       END IF;
