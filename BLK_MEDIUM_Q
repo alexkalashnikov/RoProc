@@ -63,11 +63,11 @@ p.d_cps := p.d_cps + 0.01;
         END IF;
       ELSE
 				IF TRUNC(ABS(p.d_policy_param))>999 AND p.d_acd>=TRUNC(TRUNC(ABS(p.d_policy_param))/100) AND p.d_asr_c>=(TRUNC(ABS(p.d_policy_param))/100)-TRUNC(TRUNC(ABS(p.d_policy_param))/100) THEN	/* Checking ACD blocking threshold */
-					p.appeal_value_3 := (1000/p.d_acd)*(1+(p.d_policy_param-TRUNC(p.d_policy_param)));					            /* Set appeal for priority reasons */
+					p.appeal_value_3 := (1000/p.d_acd*p.d_asr_c)*(1+(p.d_policy_param-TRUNC(p.d_policy_param)));					            /* Set appeal for priority reasons */
 					p.appeal_value_2 := p.appeal_value_3 * p.d_cost_cu*10;
 					p.appeal_value_1 := p.d_cost_cu*100*(1+(p.d_policy_param-TRUNC(p.d_policy_param)));
 				ELSIF ABS(p.d_policy_param)<1000 AND p.d_acd>=TRUNC(ABS(p.d_policy_param)) THEN
-					p.appeal_value_3 := (1000/p.d_acd)*(1+(p.d_policy_param-TRUNC(p.d_policy_param)));					            /* Set appeal for priority reasons */
+					p.appeal_value_3 := (1000/p.d_acd*p.d_asr_c)*(1+(p.d_policy_param-TRUNC(p.d_policy_param)));					            /* Set appeal for priority reasons */
 					p.appeal_value_2 := p.appeal_value_3 * p.d_cost_cu * 10;
 					p.appeal_value_1 := p.d_cost_cu*100*(1+(p.d_policy_param-TRUNC(p.d_policy_param)));
 				ELSE
