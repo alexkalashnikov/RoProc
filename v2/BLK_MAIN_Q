@@ -44,7 +44,7 @@ p.d_cps := p.d_cps + 0.01;
           p.appeal_value_2 := 5000 + p.d_asr_c;
           p.appeal_value_1 := 5000 + p.d_acd;
         ELSE
-          p.appeal_value_2 := p.appeal_value_2 + (10/(((0.45+p.d_asr_c)/2)*p.d_acd))*(100+30/1+p.d_cps) * p.d_cost_cu*10;
+          p.appeal_value_2 := p.appeal_value_2 + (10/(((0.45+p.d_asr_c)/2)*p.d_acd))*(100+30/1+p.d_cps) * p.d_cost_cu;
           p.appeal_value_1 := p.d_cost_cu*100;
         END IF;
       ELSE
@@ -57,13 +57,13 @@ p.d_cps := p.d_cps + 0.01;
 					p.appeal_value_2 := p.appeal_value_3 * p.d_cost_cu * 10;
 					p.appeal_value_1 := p.d_cost_cu*100*(1+(p.d_policy_param-TRUNC(p.d_policy_param)));
 				ELSE
-					p.appeal_value_3 := p.appeal_value_3 + (10/(((0.45+p.d_asr_c)/2)*p.d_acd))*(100+30/p.d_cps);
+					p.appeal_value_3 := p.appeal_value_3 + (10/(((0.45+p.d_asr_c)/2)*p.d_acd))*(100+30/1+p.d_cps);
 					IF p.appeal_value_3 >= 5000 THEN
 						p.appeal_value_3 := 5000;
 						p.appeal_value_2 := 5000 + p.d_asr_c;
 						p.appeal_value_1 := 5000 + p.d_acd;
 					ELSE
-						p.appeal_value_2 := p.appeal_value_2 + (10/(((0.45+p.d_asr_c)/2)*p.d_acd))*(100+30/1+p.d_cps) * p.d_cost_cu*10;
+						p.appeal_value_2 := p.appeal_value_2 + (10/(((0.45+p.d_asr_c)/2)*p.d_acd))*(100+30/1+p.d_cps) * p.d_cost_cu;
 						p.appeal_value_1 := p.d_cost_cu*100;
 					END IF;
 				END IF;
