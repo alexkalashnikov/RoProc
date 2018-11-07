@@ -8,6 +8,7 @@
   Low cut bounds: ACD_cut=<30sec   ASR_cut=<0.03
   Target_MIN:ACD=50,ASR=0.04  ASR(ACD)=1/p.d_acd/0.65+0.01
   Target_MAX:ACD=50;ASR=0.7   ASR(ACD)=1-1*14.2/p.d_acd-0.015
+  p.appeal_value_1 := EXTRACT(HOUR FROM CAST(SYSDATE AS TIMESTAMP));
 */
 
 BEGIN
@@ -68,5 +69,4 @@ p.d_cps := p.d_cps + 0.01;
 					END IF;
 				END IF;
       END IF;
-
 END;
