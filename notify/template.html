@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Blocking Notification</title>
+<style type="text/css">
+    body
+    {
+    font:normal normal 12pt Arial;
+    }
+    table
+    {
+      border:solid black 2px;
+      /*background-color: #5FC0CE;*/
+      width:40%;
+    }
+    th.header
+    {
+      border-bottom: solid 2pt black;
+      text-align:left;
+    }
+    th.header_l
+    {
+      border-bottom: solid 2pt black;
+      border-left: solid 2pt black;
+    }
+    th.bottom
+    {
+      border-top: solid 2pt black;
+      text-align:left;
+    }
+    th.bottom_l
+    {
+      border-top: solid 2pt black;
+      border-left: solid 2pt black;
+      text-align:left;
+    }
+    th,th.header,th.bottom
+    {
+      background: #5FC0CE; //#ccc;
+    }
+    #left
+    {
+      text-align: left;
+    }
+    #right
+    {
+      text-align: right;
+    }
+    #center
+    {
+      text-align: center;
+    }
+    tr
+    {
+      border-bottom: solid 1t black;
+    }
+    p.alert
+    {
+      white-space:nowrap;
+      font-weight:bold;
+      color:red;
+    }
+    tr.alert
+    {
+      background-color:red;
+      color:white;
+    }
+    td
+    {
+      border:solid black 1px;
+    }
+    td.value
+    {
+      text-align:right;
+      border-bottom: solid 1t black;
+    }
+    </style>
+</head>
+<body onload="asr_acd()">
+<p>
+Dear {owner_hi}<br/>
+We would like to inform you that we are blocking traffic to the below prefix as we are experiencing problems with this destination.<br/>
+Below we indicate reasons, why we are blocking your route. <br><i>Route will be blocked until your reply.</i><br/>
+</p>
+<table cellpadding="1" cellspacing="1">
+<tr>
+                <th class="header"><b>Destination: <i>{description}</th>
+                <th class="header_l" colspan="2" id="left"><b>Prefix: <i>{dial_peer_prfx}</th>
+</tr>
+<tr>
+                <th class="header"><b>Start time of blocking(GMT0): <i>{unblocking_time}</th>
+                <th class="header_l" colspan="2" id="left"><b>Route ID: <i>{dial_peer}</th>
+</tr>
+<tr>
+                <th class="header" id="center"><b>Parametr Name</th>
+                <th class="header_l" text-align="center"><b>Current Value</th>
+                <th class="header_l" text-align="center"><b>Expected Value</th>
+</tr>
+<tr class="{alert_acd}">
+                <td>ACD,seconds</td>
+                <td class="value" id="acd">{acd}</td>
+                <td contenteditable="true"></td>
+</tr>
+<tr class="{alert_asr}">
+                <td>ASR,%</td>
+                <td class="value" id="asr">{asr}</td>
+                <td contenteditable="true"></td>
+</tr>
+<tr class="{alert_pdd}">
+                <td>PDD,seconds</td>
+                <td class="value">{pdd}</td>
+                <td contenteditable="true"></td>
+</tr>
+<!--<tr>
+                <td>ACD blocking threshold</td>
+                <td class="value">{min_acd} sec</td>
+</tr>
+<tr class="{alert_appeal_value_1}">
+                <td>Appeal_1</td>
+                <td class="value">{appeal_value_1}</td>
+                <td class="value">{max_appeal_value_1}</td>
+</tr>
+
+                <td>Appeal blocking threshold_1</td>
+                <td class="value">{max_appeal_value_1}</td>
+</tr>         -->
+<tr class="{alert_appeal_value_2}">
+                <td>Quality&Rate Index(Q2)</td>
+                <td class="value">{appeal_value_2}</td>
+                <td class="value">{max_appeal_value_2}</td>
+</tr>
+<!--<tr>
+                <td>Appeal blocking threshold_2</td>
+                <td class="value">{max_appeal_value_2}</td>
+</tr>-->
+<tr class="{alert_appeal_value_3}">
+                <td>Quality Index(Q3)</td>
+                <td class="value">{appeal_value_3}</td>
+                <td class="value">{max_appeal_value_3}</td>
+</tr>
+<!--<tr>
+                <td>Appeal blocking threshold_3</td>
+                <td class="value">{max_appeal_value_3}</td>
+</tr>
+<tr>
+                <td>Total time:</td>
+                <td class="value">{total_time}00 sec</td>
+</tr>         -->
+<tr>
+                <th class="bottom"><b>VR-TELECOM Route Blocking Notification Form</th>
+                <th class="bottom_l" colspan="2"><b>IP: <i>195.95.156.95</th>
+</tr>
+</table>
+<script>
+  function asr_acd(){
+    var appeal_1 = {appeal_value_1};
+    var asr,acd;
+    acd = appeal_1 - (appeal_1%1);
+    asr = Math.ceil((appeal_1%1)*100);
+
+    document.getElementById('asr').innerHTML = asr;
+    document.getElementById('acd').innerHTML = acd;
+  }
+</script>
+</body>
+</html>
