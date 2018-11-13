@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>Blocking Notification</title>
+<style type="text/css">
+body
+{
+                font:normal normal 10pt Arial;
+}
+table
+{
+                border:solid black 1px;
+}
+td
+{
+                padding:0 1ex;
+}
+p.alert
+{
+                white-space:nowrap;
+                font-weight:bold;
+                color:red;
+}
+tr.alert
+{
+                background-color:red;
+                color:white;
+}
+td.value
+{
+                text-align:right;
+}
+</style>
+</head>
+<body>
+<p>
+Dear {owner_hi}<br/>
+We would like to inform you that we are blocking traffic to the below prefix as we are experiencing problems with this destination.<br/>
+In red we indicate reason, why we are blocking your route.<br/>
+</p>
+<table cellpadding="0" cellspacing="0">
+<tr>
+                <td>Destination</td>
+                <td class="value">{description}</td>
+</tr>
+<tr>
+                <td>Prefix</td>
+                <td class="value">{dial_peer_prfx}</td>
+</tr>
+<tr>
+                <td>Route ID</td>
+                <td class="value">{dial_peer}</td>
+</tr>
+<tr class="{alert_acd}">
+                <td>Current ACD</td>
+                <td class="value">{acd} sec</td>
+</tr>
+<tr>
+                <td>ACD blocking threshold</td>
+                <td class="value">{min_acd} sec</td>
+</tr>
+<tr class="{alert_appeal_value_1}">
+                <td>Appeal_1</td>
+                <td class="value">{appeal_value_1} %</td>
+</tr>
+<tr>
+                <td>Appeal blocking threshold_1</td>
+                <td class="value">{max_appeal_value_1} %</td>
+</tr>
+<tr class="{alert_appeal_value_2}">
+                <td>Appeal_2</td>
+                <td class="value">{appeal_value_2} %</td>
+</tr>
+<tr>
+                <td>Appeal blocking threshold_2</td>
+                <td class="value">{max_appeal_value_2} %</td>
+</tr>
+<tr class="{alert_appeal_value_3}">
+                <td>Appeal_3</td>
+                <td class="value">{appeal_value_3} %</td>
+</tr>
+<tr>
+                <td>Appeal blocking threshold_3</td>
+                <td class="value">{max_appeal_value_3} %</td>
+</tr>
+<tr>
+                <td>Total time:</td>
+                <td class="value">{total_time}00 sec</td>
+</tr>
+</table>
+</body>
+</html>
+ 
