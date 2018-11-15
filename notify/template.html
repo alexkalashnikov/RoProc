@@ -89,7 +89,7 @@ Below we indicate reasons, why we are blocking your route. <br><i>Route will be 
                 <th class="header_l" colspan="2" id="left"><b>Prefix: <i>{dial_peer_prfx}</th>
 </tr>
 <tr>
-                <th class="header" contenteditable="true"><b>Start time of blocking(GMT0): <i>{unblocking_time}</th>
+                <th class="header" contenteditable="true"><b>Date/Time(GMT0): <i>{blocked_till}</th>
                 <th class="header_l" colspan="2" id="left"><b>Route ID: <i>{dial_peer}</th>
 </tr>
 <tr>
@@ -100,17 +100,23 @@ Below we indicate reasons, why we are blocking your route. <br><i>Route will be 
 <tr class="{alert_acd}">
                 <td>ACD,seconds</td>
                 <td class="value" id="acd">{acd}</td>
-                <td contenteditable="true"></td>
+                <td class="value"><input type="num" size="5" maxlength="5" style="font-size:12pt" pattern="[0-9][0-9]" value="120.66"></td>
 </tr>
 <tr class="{alert_asr}">
                 <td>ASR,%</td>
                 <td class="value" id="asr">{asr}</td>
-                <td contenteditable="true"></td>
+                <td class="value"><input type="num" size="5" maxlength="4" style="font-size:12pt"></td>
 </tr>
 <tr class="{alert_pdd}">
                 <td>PDD,seconds</td>
                 <td class="value">{pdd}</td>
-                <td contenteditable="true"></td>
+                <td class="value"><input type="num" size="5" maxlength="5" style="font-size:12pt"></td>
+</tr>
+
+<tr class="{alert_appeal_value_1}">
+                <td>ACD.ASR </td>
+                <td class="value">{appeal_value_1}</td>
+                <td class="value">{max_appeal_value_1}</td>
 </tr>
 
 <tr class="{alert_appeal_value_2}">
@@ -130,6 +136,7 @@ Below we indicate reasons, why we are blocking your route. <br><i>Route will be 
                 <th class="bottom_l" colspan="2"><b>IP: <i>195.95.156.95</th>
 </tr>
 </table>
+
 <script>
   function asr_acd(){
     var appeal_1 = {appeal_value_1};
@@ -141,5 +148,6 @@ Below we indicate reasons, why we are blocking your route. <br><i>Route will be 
     document.getElementById('acd').innerHTML = acd;
   }
 </script>
+
 </body>
 </html>
