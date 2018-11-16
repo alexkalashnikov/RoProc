@@ -11,7 +11,6 @@
     table
     {
       border:solid black 2px;
-      /*background-color: #5FC0CE;*/
       width:40%;
     }
     th.header
@@ -100,17 +99,17 @@ Below we indicate reasons, why we are blocking your route. <br><i>Route will be 
 <tr class="{alert_acd}">
                 <td>ACD,seconds</td>
                 <td class="value" id="acd">{acd}</td>
-                <td class="value"><input type="num" size="5" maxlength="5" style="font-size:12pt" pattern="[0-9][0-9]" value="120.66"></td>
+                <td class="value">{alert_acd}	{min_acd}</td>
 </tr>
 <tr class="{alert_asr}">
                 <td>ASR,%</td>
                 <td class="value" id="asr">{asr}</td>
-                <td class="value"><input type="num" size="5" maxlength="4" style="font-size:12pt"></td>
+                <td class="value">{alert_asr}	{min_asr}</td>
 </tr>
 <tr class="{alert_pdd}">
                 <td>PDD,seconds</td>
                 <td class="value">{pdd}</td>
-                <td class="value"><input type="num" size="5" maxlength="5" style="font-size:12pt"></td>
+                <td class="value">{alert_pdd}	{max_pdd}</td>
 </tr>
 
 <tr class="{alert_appeal_value_1}">
@@ -122,13 +121,13 @@ Below we indicate reasons, why we are blocking your route. <br><i>Route will be 
 <tr class="{alert_appeal_value_2}">
                 <td>Quality&Rate Index(Q2)</td>
                 <td class="value">{appeal_value_2}</td>
-                <td class="value">{max_appeal_value_2}</td>
+                <td class="value">&lt;{max_appeal_value_2}</td>
 </tr>
 
 <tr class="{alert_appeal_value_3}">
                 <td>Quality Index(Q3)</td>
                 <td class="value">{appeal_value_3}</td>
-                <td class="value">{max_appeal_value_3}</td>
+                <td class="value"><{max_appeal_value_3}</td>
 </tr>
 
 <tr>
@@ -136,7 +135,7 @@ Below we indicate reasons, why we are blocking your route. <br><i>Route will be 
                 <th class="bottom_l" colspan="2"><b>IP: <i>195.95.156.95</th>
 </tr>
 </table>
-
+<!--
 <script>
   function asr_acd(){
     var appeal_1 = {appeal_value_1};
@@ -148,6 +147,6 @@ Below we indicate reasons, why we are blocking your route. <br><i>Route will be 
     document.getElementById('acd').innerHTML = acd;
   }
 </script>
-
+-->
 </body>
 </html>
