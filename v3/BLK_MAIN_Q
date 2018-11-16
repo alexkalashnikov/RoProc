@@ -24,10 +24,10 @@ p.d_cps := p.d_cps + 0.01;
 			p.d_asr_c := p.d_success_calls_asr/p.d_total_calls;
 			p.d_acd := p.d_total_time/p.d_success_calls_asr;			/* Calculate non-EMA ACD  */
 		END IF;
-/*********************************** > 50 ; < 100 ************************************************/
+/*********************************** > 50 ; < 150 ************************************************/
 	ELSIF (p.d_total_calls < 150 AND p.d_total_calls>49) THEN
 		IF p.d_total_time<1 OR p.d_success_calls_asr<2 THEN   	/* Excluding calculation on empty stats values */
-      p.appeal_value_3 := p.appeal_value_3 + p.d_total_calls*2;
+      p.appeal_value_3 := p.appeal_value_3 + p.d_total_calls;
       p.appeal_value_2 := p.appeal_value_3 * p.d_cost_cu*10;
       p.appeal_value_1 := 0.0;
       RETURN;
@@ -38,7 +38,7 @@ p.d_cps := p.d_cps + 0.01;
 /*********************************** > 150 ************************************************/
 	ELSE
 		IF p.d_total_time<1 OR p.d_success_calls_asr<2 THEN   	/* Excluding calculation on empty stats values */
-      p.appeal_value_3 := p.appeal_value_3 + p.d_total_calls*2;
+      p.appeal_value_3 := p.appeal_value_3 + p.d_total_calls/1.5;
       p.appeal_value_2 := p.appeal_value_3 * p.d_cost_cu*10;
       p.appeal_value_1 := 0.0;
       RETURN;
