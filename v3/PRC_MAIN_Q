@@ -70,3 +70,6 @@ p.d_cps := p.d_cps + 0.01;
 			/*p.appeal_value_2 := 5000;*/
 		END IF;
 END;
+/*	p.appeal_value_1 := (100 / p.d_policy_param) * p.d_total_time;
+	p.appeal_value_2 := (100 / p.d_policy_param) * p.d_success_calls_asr;
+	p.appeal_value_3 := (100 / p.d_policy_param) * p.d_total_calls;*/
