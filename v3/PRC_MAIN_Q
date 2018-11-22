@@ -1,0 +1,72 @@
+/* v3 %-based develop-from-BLK_MAIN_Q
+	In this procedure "Additional routing policy parameter" is bloking threshold by ACD or/and ASR.
+	"Additional policy parameter" let limiting low bound of ASR and ACD.
+	It accepts "xx" or "xxx" or "xxyy" or "xxxyy" input.
+	Where "xx" - ACD, "yy" - ASR in %. Format "yy" only, not acceptable, it will be used as ACD in this case.
+
+	This formula use EMA-ACD with averaging by d_total_time/d_success_calls_asr.
+  Low cut bounds: ACD_cut=<30sec   ASR_cut=<0.03
+  Target_MIN:ACD=50,ASR=0.04  ASR(ACD)=1/p.d_acd/0.65+0.01
+  Target_MAX:ACD=50;ASR=0.7   ASR(ACD)=1-1*14.2/p.d_acd-0.015
+*/
+
+BEGIN
+p.d_cost_cu := p.d_cost_cu + 0.0001;
+p.d_cps := p.d_cps + 0.01;
+/*********************************** < 50 ************************************************/
+	IF p.d_total_calls < 50 AND p.d_success_calls_asr<25 THEN 		      /* Block decision: IF YES - action, before necessary value of total calls will be accumulate*/
+		IF p.d_total_time<1 OR p.d_success_calls_asr<2 THEN   	/* Excluding calculation on empty stats values */
+			p.appeal_value_1 := 0.0; 					 /*Set default appeals 1 2 3 */
+			p.appeal_value_2 := 0.02;
+			p.appeal_value_3 := 0.03;
+      RETURN;
+		ELSE
+			p.d_asr_c := p.d_success_calls_asr/p.d_total_calls;
+			p.d_acd := p.d_total_time/p.d_success_calls_asr;			/* Calculate non-EMA ACD  */
+		END IF;
+/*********************************** > 50 ; < 150 ************************************************/
+	ELSIF (p.d_total_calls < 150 AND p.d_total_calls>49) THEN
+		IF p.d_total_time<1 OR p.d_success_calls_asr<2 THEN   	/* Excluding calculation on empty stats values */
+      p.appeal_value_3 := p.appeal_value_3 + p.d_total_calls;
+      p.appeal_value_2 := p.appeal_value_3 * p.d_cost_cu*10;
+      p.appeal_value_1 := 0.0;
+      RETURN;
+    ELSE
+      p.d_asr_c := (p.d_asr_c+(p.d_success_calls_asr/p.d_total_calls))/2;
+      p.d_acd := (p.d_acd+(p.d_total_time/p.d_success_calls_asr))/2;   		/* p.d_acd - averaged*/
+    END IF;
+/*********************************** > 150 ************************************************/
+	ELSE
+		IF p.d_total_time<1 OR p.d_success_calls_asr<2 THEN   	/* Excluding calculation on empty stats values */
+      p.appeal_value_3 := p.appeal_value_3 + p.d_total_calls/1.5;
+      p.appeal_value_2 := p.appeal_value_3 * p.d_cost_cu*10;
+      p.appeal_value_1 := 0.0;
+      RETURN;
+    ELSE
+      p.d_asr_c := (p.d_asr_c+p.d_asr_s+(p.d_success_calls_asr/p.d_total_calls))/3;
+      p.d_acd := (p.d_acd+(p.d_total_time/p.d_success_calls_asr))/2;
+    END IF;
+	END IF;
+/********************** blocking common calc part ********************/
+      IF p.d_acd<30 OR p.d_asr_c<0.03 OR (1/p.d_acd/0.65+0.01)>p.d_asr_c OR (1-1*14.2/p.d_acd-0.015)<p.d_asr_c THEN
+        p.appeal_value_3 := p.appeal_value_3 + (10/(((0.45+p.d_asr_c)/2)*p.d_acd))*(100+30/1+p.d_cps);
+        p.appeal_value_2 := p.appeal_value_2 + (10/(((0.45+p.d_asr_c)/2)*p.d_acd))*(100+30/1+p.d_cps) * p.d_cost_cu;
+      ELSE
+				IF TRUNC(ABS(p.d_policy_param))>999 AND p.d_acd>=TRUNC(TRUNC(ABS(p.d_policy_param))/100) AND p.d_asr_c>=(TRUNC(ABS(p.d_policy_param))/100)-TRUNC(TRUNC(ABS(p.d_policy_param))/100) THEN	/* Checking ACD blocking threshold */
+					p.appeal_value_3 := (1000/(p.d_acd*p.d_asr_c))*(1+(p.d_policy_param-TRUNC(p.d_policy_param)));					            /* Set appeal for priority reasons */
+					p.appeal_value_2 := p.appeal_value_3 * p.d_cost_cu*10;
+				ELSIF ABS(p.d_policy_param)<1000 AND p.d_acd>=TRUNC(ABS(p.d_policy_param)) THEN
+					p.appeal_value_3 := (1000/(p.d_acd*p.d_asr_c))*(1+(p.d_policy_param-TRUNC(p.d_policy_param)));					            /* Set appeal for priority reasons */
+					p.appeal_value_2 := p.appeal_value_3 * p.d_cost_cu * 10;
+				ELSE
+					p.appeal_value_3 := p.appeal_value_3 + (10/(((0.45+p.d_asr_c)/2)*p.d_acd))*(100+30/1+p.d_cps);
+					p.appeal_value_2 := p.appeal_value_2 + (10/(((0.45+p.d_asr_c)/2)*p.d_acd))*(100+30/1+p.d_cps) * p.d_cost_cu;
+				END IF;
+      END IF;
+/*p.appeal_value_1 := EXTRACT(HOUR FROM CAST(SYSDATE AS TIMESTAMP));*/
+		p.appeal_value_1 := TRUNC(p.d_acd)+p.d_asr_c;
+		IF p.appeal_value_3 >= 5000 THEN
+			p.appeal_value_3 := 5000;
+			/*p.appeal_value_2 := 5000;*/
+		END IF;
+END;
